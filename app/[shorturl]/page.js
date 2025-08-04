@@ -1,19 +1,31 @@
 import { redirect } from "next/navigation"
-// fetch krenge 
 import clientPromise from "@/lib/mongodb"
+
 export default async function Page({ params }) {
     const shorturl = (await params).shorturl
     
-    const client = await clientPromise;
-    const db= client.db("bitlinks")
-    const collection =db.collection("url")
-
-    const doc= await collection.findOne({shorturl:shorturl})
-    if(doc){
-        redirect(doc.url)
-    }else{
-        redirect(`${process.env.NEXT_PUBLIC_HOST}`)
+    // Check if MongoDB is available
+    if (!clientPromise) {
+        // Redirect to home if database is not available
+        redirect('/')
+        return
     }
 
-    return <div>My Post: {url}</div>
-  }
+    try {
+        const client = await clientPromise;
+        const db = client.db("bitlinks")
+        const collection = db.collection("url")
+
+        const doc = await collection.findOne({shorturl: shorturl})
+        if(doc){
+            redirect(doc.url)
+        } else {
+            redirect('/')
+        }
+    } catch (error) {
+        console.error('Database error:', error)
+        redirect('/')
+    }
+
+    return <div>Redirecting...</div>
+}
