@@ -15,7 +15,7 @@ export async function POST(request) {
         const body = await request.json()
         const client = await clientPromise;
         const db = client.db("bitlinks")
-        const collection = db.collection("url")
+        const collection = db.collection("urls")
 
         // check if the url exist 
         const doc = await collection.findOne({shorturl: body.shorturl})
