@@ -1,6 +1,12 @@
 import { redirect } from "next/navigation"
 import clientPromise from "@/lib/mongodb"
 
+// Required for static export
+export async function generateStaticParams() {
+    // Return empty array for now - this will generate pages on demand
+    return []
+}
+
 export default async function Page({ params }) {
     const shorturl = (await params).shorturl
     

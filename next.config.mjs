@@ -1,8 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    // Use static export for Netlify deployment
-    output: 'export',
-    trailingSlash: true,
+    // Standard build for server-side functionality
     images: {
       unoptimized: true
     },
