@@ -10,22 +10,24 @@ export async function generateStaticParams() {
 export default async function Page({ params }) {
     const shorturl = (await params).shorturl
     
-    // Check if MongoDB is available
-    if (!clientPromise) {
-        // Redirect to home if database is not available
-        redirect('/')
-        return
-    }
-
     try {
+        // Check if MongoDB is available
+        if (!clientPromise) {
+            console.log("No MongoDB connection, redirecting to home")
+            redirect('/')
+            return
+        }
+
         const client = await clientPromise;
         const db = client.db("bitlinks")
         const collection = db.collection("url")
 
         const doc = await collection.findOne({shorturl: shorturl})
-        if(doc){
+        if(doc && doc.url){
+            console.log("Found URL, redirecting to:", doc.url)
             redirect(doc.url)
         } else {
+            console.log("URL not found, redirecting to home")
             redirect('/')
         }
     } catch (error) {
